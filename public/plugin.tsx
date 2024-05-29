@@ -31,14 +31,14 @@ import {
   setIncontextInsightRegistry,
 } from './services';
 import { ConfigSchema } from '../common/types/config';
+import { IncontextInsightProps } from './components/incontext_insight';
 
 export const [getCoreStart, setCoreStart] = createGetterSetter<CoreStart>('CoreStart');
 
 // @ts-ignore
 const LazyIncontextInsightComponent = lazy(() => import('./components/incontext_insight'));
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const IncontextInsightComponent: React.FC<{ props: any }> = (props) => (
+export const IncontextInsightComponent: React.FC<{ props: IncontextInsightProps }> = (props) => (
   <Suspense fallback={<EuiLoadingSpinner />}>
     <LazyIncontextInsightComponent {...props} />
   </Suspense>
