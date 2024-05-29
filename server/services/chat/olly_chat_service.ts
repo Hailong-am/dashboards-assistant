@@ -109,8 +109,12 @@ export class OllyChatService implements ChatService {
   }> {
     const { input, conversationId } = payload;
 
+    let llmInput = input.content;
+    if (input.context?.content) {
+      llmInput = `Based on the context: ${input.context?.content}, answer question: ${input.content}`;
+    }
     const parametersPayload: Pick<AgentRunPayload, 'question' | 'verbose' | 'memory_id'> = {
-      question: input.content,
+      question: llmInput,
       verbose: false,
     };
 

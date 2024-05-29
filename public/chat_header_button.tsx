@@ -170,7 +170,11 @@ export const HeaderChatButton = (props: HeaderChatButtonProps) => {
   }, []);
 
   useEffect(() => {
-    const handleSuggestion = (event: { suggestion: string }) => {
+    const handleSuggestion = (event: {
+      suggestion: string;
+      contextContent: string;
+      datasourceId?: string;
+    }) => {
       if (!flyoutVisible) {
         // open chat window
         setFlyoutVisible(true);
@@ -182,7 +186,7 @@ export const HeaderChatButton = (props: HeaderChatButtonProps) => {
         type: 'input',
         contentType: 'text',
         content: event.suggestion,
-        context: { appId },
+        context: { appId, content: event.contextContent, datasourceId: event.datasourceId },
       });
     };
     registry.on('onSuggestion', handleSuggestion);
