@@ -27,17 +27,22 @@ import {
 } from '@elastic/eui';
 import React, { Children, isValidElement, useEffect, useRef, useState } from 'react';
 import { IncontextInsight as IncontextInsightInput } from '../../types';
-import { getIncontextInsightRegistry, getNotifications } from '../../services';
+import { getNotifications, IncontextInsightRegistry } from '../../services';
 // TODO: Replace with getChrome().logos.Chat.url
 import chatIcon from '../../assets/chat.svg';
 
 export interface IncontextInsightProps {
   children?: React.ReactNode;
   contextProvider?: () => Promise<string>;
+  incontextInsightRegistry?: IncontextInsightRegistry;
 }
 
 // TODO: add saved objects / config to store seed suggestions
-export const IncontextInsight = ({ children, contextProvider }: IncontextInsightProps) => {
+export const IncontextInsight = ({
+  children,
+  contextProvider,
+  incontextInsightRegistry,
+}: IncontextInsightProps) => {
   const anchor = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
 
@@ -76,7 +81,7 @@ export const IncontextInsight = ({ children, contextProvider }: IncontextInsight
     }
   }, []);
 
-  const registry = getIncontextInsightRegistry();
+  const registry = incontextInsightRegistry;
   const toasts = getNotifications().toasts;
   let target: React.ReactNode;
   let input: IncontextInsightInput;
@@ -84,7 +89,7 @@ export const IncontextInsight = ({ children, contextProvider }: IncontextInsight
   const findIncontextInsight = (node: React.ReactNode): React.ReactNode => {
     try {
       if (!isValidElement(node)) return;
-      if (node.key && registry.get(node.key as string)) {
+      if (node.key && registry?.get(node.key as string)) {
         input = registry.get(node.key as string);
         if (contextProvider) {
           input.contextProvider = contextProvider;
@@ -132,8 +137,7 @@ export const IncontextInsight = ({ children, contextProvider }: IncontextInsight
 
   const onSubmitClick = (incontextInsight: IncontextInsightInput, suggestion: string) => {
     setIsVisible(false);
-    console.log(incontextInsight.contextProvider);
-    registry.open(incontextInsight, suggestion);
+    registry?.open(incontextInsight, suggestion);
     if (anchor.current) {
       const incontextInsightAnchorButtonClassList = anchor.current.parentElement?.querySelector(
         '.incontextInsightAnchorButton'
@@ -152,7 +156,7 @@ export const IncontextInsight = ({ children, contextProvider }: IncontextInsight
         })}
       </EuiText>
       <EuiListGroup flush>
-        {registry.getSuggestions(incontextInsight.key).map((suggestion, index) => (
+        {registry?.getSuggestions(incontextInsight.key).map((suggestion, index) => (
           <div key={`${incontextInsight.key}-${index}-${incontextInsight.interactionId}`}>
             <EuiSpacer size="xs" />
             <EuiListGroupItem
