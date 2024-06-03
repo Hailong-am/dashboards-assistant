@@ -150,7 +150,12 @@ export class AssistantPlugin
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       renderIncontextInsight: (props: any) => {
         if (!this.incontextInsightRegistry?.isEnabled()) return <div {...props} />;
-        return <IncontextInsightComponent {...props} />;
+        return (
+          <IncontextInsightComponent
+            {...props}
+            incontextInsightRegistry={this.incontextInsightRegistry}
+          />
+        );
       },
     };
   }
