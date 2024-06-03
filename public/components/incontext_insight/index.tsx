@@ -216,6 +216,12 @@ export const IncontextInsight = ({
             value={userQuestion}
             autoFocus
             onChange={(e) => setUserQuestion(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                onSubmitClick(incontextInsight, userQuestion);
+                setUserQuestion('');
+              }
+            }}
           />
         </EuiFormRow>
       </EuiFlexItem>

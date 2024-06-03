@@ -181,9 +181,9 @@ export const HeaderChatButton = (props: HeaderChatButtonProps) => {
       if (!flyoutVisible) {
         // open chat window
         setFlyoutVisible(true);
-        // start a new chat
-        props.assistantActions.loadChat();
       }
+      // start a new chat
+      props.assistantActions.loadChat();
       // send message
       props.assistantActions.send({
         type: 'input',
